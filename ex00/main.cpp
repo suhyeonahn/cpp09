@@ -2,13 +2,16 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include<algorithm>
+#include <algorithm>
 #include <set>
 #include <vector>
 
 const int MAX_YR = 9999;
 const int MIN_YR = 1800;
-  
+
+const int MAX_VAL = 1000;
+const int MIN_VAL = 0;
+
 bool isLeap(int y) {
     return (((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0));
 }
@@ -35,12 +38,9 @@ bool isDigit(std::string str) {
   int num;
 
   iss >> num;
-  if (iss.fail()) {
-    std::cerr << "ERROR!\n";
-    return 1;
-  }
-  std::cout << num << "\n";
-  return 0;
+  if (iss.fail())
+    return false;
+  return true;
 }
 
 int ft_itos(std::string str) {
@@ -65,13 +65,17 @@ std::vector<std::string> split (const std::string &s, char delim) {
 }
 
 //use unordered_set
-int main() {
+int main(int argc, char**argv) {
+    if (argc != 2) {
+        std::cerr << "Error: bad argument(s)" << std::endl;
+        return 1;
+    }
+
     std::fstream newFile;
 
-    newFile.open("input.txt", std::ios::in);
+    newFile.open(argv[1], std::ios::in);
     
     if (newFile.is_open()) {
-
         //std::set<std::pair <std::string,std::string> > set;
         std::string line;
 
@@ -79,25 +83,35 @@ int main() {
             std::string editedLine(line);
             editedLine.erase(remove(editedLine.begin(), editedLine.end(), ' '), editedLine.end());
             std::size_t index = editedLine.find("|");
-            if (index == std::string::npos) {
-                std::cerr << "Error: bad input => " << line << std::endl;
+            if (index == std::string::npos || index == 0) {
+                std::cerr << "Error: bad syntax (`|` is missing) => " << line << std::endl;
             }
             else {
-                std::vector<std::string> date = split(editedLine.substr(0,index), '-');
+                std::string first = editedLine.substr(0, index);
+                std::vector<std::string> date = split(first, '-');
                 if (date.size() != 3) {
-                    std::cerr << "Error: bad input(date) => " << line << std::endl;
-                    return ;
+                    std::cerr << "Error:  => bad syntax (date) => " << line << std::endl;
                 }
-                for (std::vector<std::string>::iterator it = date.begin() ; it != date.end(); ++it) {
-                    if (!isDigit(*it))
-                        return ;
+                else {
+                    bool isDate = true;
+                    std::string second = editedLine.substr(index + 1);
+                    for (std::vector<std::string>::iterator it = date.begin() ; it != date.end(); ++it) {
+                        if (!isDigit(*it))
+                            isDate = false;
+                    }
+                    if (!isDate) {
+                         std::cerr << "Error: date is not digit => " << line << std::endl;
+                    }
+                    else if (!isValidDate(ft_itos(date[2]), ft_itos(date[1]), ft_itos(date[0]))) {
+                        std::cerr << "Error: invalid date => " << line << std::endl;
+                    }
+                    else if (!isDigit(second) || ft_itos(second) > MAX_VAL || ft_itos(second) < MIN_VAL) {
+                        std::cerr << "Error: invalid value => " << line << std::endl;
+                    }
+                    else {
+                        std::cout << first << " => " << second << " = " << ft_itos(second) * 0.3 << std::endl;
+                    }
                 }
-                if (!isValidDate(ft_itos(date[0]), ft_itos(date[1]), ft_itos(date[1]))) {
-                    std::cerr << "Error: bad input(date) => " << line << std::endl;
-                    return ;
-                }
-
-
                 //std::pair<std::string,std::string> pair(editedLine.substr(0,index), editedLine.substr(index + 1));
                 //set.insert(pair);
             }
@@ -107,5 +121,8 @@ int main() {
         //for (std::set<std::pair <std::string,std::string> >::iterator it=set.begin(); it!=set.end(); ++it) {
         //    std::cout << "?" << it->first << "/"  << it->second << "?"<< std::endl;
         //}
+    }
+    else {
+        std::cerr << "Error: can't open file" << std::endl;
     }
 }
