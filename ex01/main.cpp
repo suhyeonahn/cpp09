@@ -113,6 +113,6 @@ int main(int argc, char**argv) {
         stack.pop_front();
         stack.push_front(result);
     }
-    std::cout << "result is " + result << std::endl;
+    std::cout << "Result is " + result << std::endl;
     return 0;
 }
