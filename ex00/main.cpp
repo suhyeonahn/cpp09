@@ -67,7 +67,7 @@ std::vector<std::string> split (const std::string &s, char delim) {
 //use unordered_set
 int main(int argc, char**argv) {
     if (argc != 2) {
-        std::cerr << "Error: bad argument(s)" << std::endl;
+        std::cout << "Error: bad argument(s)" << std::endl;
         return 1;
     }
 
@@ -84,13 +84,13 @@ int main(int argc, char**argv) {
             editedLine.erase(remove(editedLine.begin(), editedLine.end(), ' '), editedLine.end());
             std::size_t index = editedLine.find("|");
             if (index == std::string::npos || index == 0) {
-                std::cerr << "Error: bad syntax (`|` is missing) => " << line << std::endl;
+                std::cout << "Error: bad syntax (`|` is missing) => " << line << std::endl;
             }
             else {
                 std::string first = editedLine.substr(0, index);
                 std::vector<std::string> date = split(first, '-');
                 if (date.size() != 3) {
-                    std::cerr << "Error:  => bad syntax (date) => " << line << std::endl;
+                    std::cout << "Error:  => bad syntax (date) => " << line << std::endl;
                 }
                 else {
                     bool isDate = true;
@@ -100,13 +100,13 @@ int main(int argc, char**argv) {
                             isDate = false;
                     }
                     if (!isDate) {
-                         std::cerr << "Error: date is not digit => " << line << std::endl;
+                         std::cout << "Error: date is not digit => " << line << std::endl;
                     }
                     else if (!isValidDate(ft_itos(date[2]), ft_itos(date[1]), ft_itos(date[0]))) {
-                        std::cerr << "Error: invalid date => " << line << std::endl;
+                        std::cout << "Error: invalid date => " << line << std::endl;
                     }
                     else if (!isDigit(second) || ft_itos(second) > MAX_VAL || ft_itos(second) < MIN_VAL) {
-                        std::cerr << "Error: invalid value => " << line << std::endl;
+                        std::cout << "Error: invalid value => " << line << std::endl;
                     }
                     else {
                         std::cout << first << " => " << second << " = " << ft_itos(second) * 0.3 << std::endl;
@@ -123,6 +123,6 @@ int main(int argc, char**argv) {
         //}
     }
     else {
-        std::cerr << "Error: can't open file" << std::endl;
+        std::cout << "Error: can't open file" << std::endl;
     }
 }
