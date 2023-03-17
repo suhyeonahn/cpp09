@@ -3,8 +3,8 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
-#include <set>
 #include <vector>
+#include <map>
 
 const int MAX_YR = 9999;
 const int MIN_YR = 1800;
@@ -43,9 +43,9 @@ bool isDigit(std::string str) {
   return true;
 }
 
-int ft_itos(std::string str) {
+float ft_stof(std::string str) {
   std::istringstream iss(str);
-  int num;
+  float num;
 
   iss >> num;
   return (num);
@@ -64,26 +64,76 @@ std::vector<std::string> split (const std::string &s, char delim) {
     return result;
 }
 
-//use unordered_set
+std::map<std::string, float> readData() {
+    std::map<std::string, float> data;
+    std::fstream dataFile;
+
+    dataFile.open("./data.csv", std::ios::in);
+    if (dataFile.is_open()) {
+        std::string line;
+
+        while (getline(dataFile, line)) { 
+            std::size_t index = line.find(",");
+            if (line == "date,exchange_rate")
+                ;
+            else if (index == std::string::npos || index == 0) {
+                std::cout << "Error: data: bad syntax (`,` is missing) => " << line << std::endl;
+            }
+            else {
+                std::string first = line.substr(0, index);
+                std::vector<std::string> date = split(first, '-');
+                if (date.size() != 3) {
+                    std::cout << "Error: data: => bad syntax (date) => " << line << std::endl;
+                }
+                else {
+                    bool isDate = true;
+                    std::string second = line.substr(index + 1);
+                    for (std::vector<std::string>::iterator it = date.begin() ; it != date.end(); ++it) {
+                        if (!isDigit(*it))
+                            isDate = false;
+                    }
+                    if (!isDate) {
+                         std::cout << "Error: data: date is not digit => " << line << std::endl;
+                    }
+                    else if (!isValidDate(ft_stof(date[2]), ft_stof(date[1]), ft_stof(date[0]))) {
+                        std::cout << "Error: data: invalid date => " << line << std::endl;
+                    }
+                    else {
+                        data.insert(std::make_pair(first, ft_stof(second)));
+                        //std::cout << first << " => " << second << std::endl;
+                    }
+                }
+            }
+        }
+        dataFile.close();
+    }
+    else {
+        std::cout << "Error: data: can't open file" << std::endl;
+    }
+    return data;
+}
+
 int main(int argc, char**argv) {
     if (argc != 2) {
         std::cout << "Error: bad argument(s)" << std::endl;
         return 1;
     }
 
+    std::map<std::string, float> data = readData();
     std::fstream newFile;
 
     newFile.open(argv[1], std::ios::in);
     
     if (newFile.is_open()) {
-        //std::set<std::pair <std::string,std::string> > set;
         std::string line;
 
-        while (getline(newFile, line)) { 
+        while (getline(newFile, line)) {
             std::string editedLine(line);
             editedLine.erase(remove(editedLine.begin(), editedLine.end(), ' '), editedLine.end());
             std::size_t index = editedLine.find("|");
-            if (index == std::string::npos || index == 0) {
+            if (line == "date | value")
+                ;
+            else if (index == std::string::npos || index == 0) {
                 std::cout << "Error: bad syntax (`|` is missing) => " << line << std::endl;
             }
             else {
@@ -102,27 +152,32 @@ int main(int argc, char**argv) {
                     if (!isDate) {
                          std::cout << "Error: date is not digit => " << line << std::endl;
                     }
-                    else if (!isValidDate(ft_itos(date[2]), ft_itos(date[1]), ft_itos(date[0]))) {
+                    else if (!isValidDate(ft_stof(date[2]), ft_stof(date[1]), ft_stof(date[0]))) {
                         std::cout << "Error: invalid date => " << line << std::endl;
                     }
-                    else if (!isDigit(second) || ft_itos(second) > MAX_VAL || ft_itos(second) < MIN_VAL) {
+                    else if (!isDigit(second) || ft_stof(second) > MAX_VAL || ft_stof(second) < MIN_VAL) {
                         std::cout << "Error: invalid value => " << line << std::endl;
                     }
                     else {
-                        std::cout << first << " => " << second << " = " << ft_itos(second) * 0.3 << std::endl;
+                        std::cout << first << " => " << second << " = ";
+                        if ((--data.end())->first < first) {
+                            std::cout << ft_stof(second) * (--data.end())->second << std::endl;
+                        }
+                        else {
+                            std::map<std::string,float>::iterator it = data.find(first);
+                            if (data.find(first) != data.end())
+                                std::cout << ft_stof(second) * (*it).second << std::endl;
+                            else
+                                std::cout << ft_stof(second) * (--data.lower_bound(first))->second << std::endl;
+                        }
                     }
                 }
-                //std::pair<std::string,std::string> pair(editedLine.substr(0,index), editedLine.substr(index + 1));
-                //set.insert(pair);
             }
         }
         newFile.close();
-
-        //for (std::set<std::pair <std::string,std::string> >::iterator it=set.begin(); it!=set.end(); ++it) {
-        //    std::cout << "?" << it->first << "/"  << it->second << "?"<< std::endl;
-        //}
     }
     else {
         std::cout << "Error: can't open file" << std::endl;
     }
+    return 0;
 }
