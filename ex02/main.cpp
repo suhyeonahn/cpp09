@@ -26,10 +26,10 @@ int ft_stoi(const std::string &str) {
   return (num);
 }
 
-bool isStackDigit(std::deque<std::string> stack) {
+bool isdequeDigit(std::deque<std::string> deque) {
     size_t i = 0;
-    while (i < stack.size() -1) {
-        if (!isDigit(stack[i]))
+    while (i < deque.size() -1) {
+        if (!isDigit(deque[i]))
             return false;
         i++;
     }
@@ -114,20 +114,16 @@ int main(int argc, char**argv) {
         return 1;
     }
 
-    std::deque<std::string> stack = split(argv[1], ' ');
-    for (size_t i = 0; i < stack.size(); i ++) {
-        if (stack[i].empty())
-            std::cout << stack[i] << std::endl;
-    }
+    std::deque<std::string> deque = split(argv[1], ' ');
 
-    if (!isStackDigit(stack)) {
+    if (!isdequeDigit(deque)) {
         std::cout << "Error: non digit" << std::endl;
         return 1;
     }
     
     std::vector<int> vector;
-    for (size_t i = 0; i < stack.size(); i ++) {
-        vector.push_back(ft_stoi(stack[i]));
+    for (size_t i = 0; i < deque.size(); i ++) {
+        vector.push_back(ft_stoi(deque[i]));
     }
 
     mergeSort(vector, 0, vector.size() -1);

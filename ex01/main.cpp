@@ -70,15 +70,15 @@ float calcul(const float &a, const float &b, const std::string &str) {
     return (result);
 }
 
-bool isValidExpression(std::deque<std::string> stack) {
+bool isValidExpression(std::deque<std::string> deque) {
     //check if elements are even
-    if ((stack.size() < 3) || (stack.size() % 2 == 0))
+    if ((deque.size() < 3) || (deque.size() % 2 == 0))
         return false;
-    if (!isDigit(stack[0]))
+    if (!isDigit(deque[0]))
         return false;
     size_t i = 1;
-    while (i < stack.size() -1) {
-        if (!isDigit(stack[i]) || !isOperation(stack[i+1]))
+    while (i < deque.size() -1) {
+        if (!isDigit(deque[i]) || !isOperation(deque[i+1]))
             return false;
         i += 2;
     }
@@ -91,27 +91,27 @@ int main(int argc, char**argv) {
         return 1;
     }
 
-    std::deque<std::string> stack = split(argv[1], ' ');
-    for (size_t i = 0; i < stack.size(); i ++) {
-        if (stack[i].empty())
-            std::cout << stack[i] << std::endl;
-    }
+    std::deque<std::string> deque = split(argv[1], ' ');
+    //for (size_t i = 0; i < deque.size(); i ++) {
+    //    if (deque[i].empty())
+    //        std::cout << deque[i] << std::endl;
+    //}
 
-    if (!isValidExpression(stack)) {
+    if (!isValidExpression(deque)) {
         std::cout << "Error: invalid expression" << std::endl;
         return 1;
     }
     
     std::string result;
 
-    size_t count = (stack.size() - 1) / 2;
+    size_t count = (deque.size() - 1) / 2;
     for (size_t i = 0; i < count; i++) {
         int j = 0;
-        result = ft_itos(calcul(ft_stof(stack[j]), ft_stof(stack[j+1]), stack[j+2]));
-        stack.pop_front();
-        stack.pop_front();
-        stack.pop_front();
-        stack.push_front(result);
+        result = ft_itos(calcul(ft_stof(deque[j]), ft_stof(deque[j+1]), deque[j+2]));
+        deque.pop_front();
+        deque.pop_front();
+        deque.pop_front();
+        deque.push_front(result);
     }
     std::cout << "Result is " + result << std::endl;
     return 0;
