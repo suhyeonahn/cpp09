@@ -40,7 +40,7 @@ bool isOperation(const std::string &str)
     return false;
 }
 
-float ft_stoi(const std::string &str) {
+float ft_stof(const std::string &str) {
   std::istringstream iss(str);
   float num;
 
@@ -107,7 +107,7 @@ int main(int argc, char**argv) {
     size_t count = (stack.size() - 1) / 2;
     for (size_t i = 0; i < count; i++) {
         int j = 0;
-        result = ft_itos(calcul(ft_stoi(stack[j]), ft_stoi(stack[j+1]), stack[j+2]));
+        result = ft_itos(calcul(ft_stof(stack[j]), ft_stof(stack[j+1]), stack[j+2]));
         stack.pop_front();
         stack.pop_front();
         stack.pop_front();
