@@ -3,7 +3,6 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
-#include <vector>
 #include <map>
 
 const int MAX_YR = 9999;
@@ -52,13 +51,15 @@ float ft_stof(std::string str) {
 }
 
 // MAKE this function as template to use string and int
-std::vector<std::string> split (const std::string &s, char delim) {
-    std::vector<std::string> result;
+std::map<int, std::string> split (const std::string &s, char delim) {
+    std::map<int, std::string> result;
     std::stringstream ss(s);
     std::string item;
 
+    int i = 0;
     while (getline(ss, item, delim)) {
-        result.push_back(item);
+        result.insert(std::make_pair(i, item));
+        i++;
     }
 
     return result;
@@ -81,15 +82,15 @@ std::map<std::string, float> readData() {
             }
             else {
                 std::string first = line.substr(0, index);
-                std::vector<std::string> date = split(first, '-');
+                std::map<int, std::string> date = split(first, '-');
                 if (date.size() != 3) {
                     std::cout << "Error: data: => bad syntax (date) => " << line << std::endl;
                 }
                 else {
-                    bool isDate = true;
                     std::string second = line.substr(index + 1);
-                    for (std::vector<std::string>::iterator it = date.begin() ; it != date.end(); ++it) {
-                        if (!isDigit(*it))
+                    bool isDate = true;
+                    for (int i = 0; i < 3; i++ ) {
+                        if (!isDigit(date[i]))
                             isDate = false;
                     }
                     if (!isDate) {
@@ -138,15 +139,15 @@ int main(int argc, char**argv) {
             }
             else {
                 std::string first = editedLine.substr(0, index);
-                std::vector<std::string> date = split(first, '-');
+                std::map<int, std::string> date = split(first, '-');
                 if (date.size() != 3) {
                     std::cout << "Error:  => bad syntax (date) => " << line << std::endl;
                 }
                 else {
                     bool isDate = true;
                     std::string second = editedLine.substr(index + 1);
-                    for (std::vector<std::string>::iterator it = date.begin() ; it != date.end(); ++it) {
-                        if (!isDigit(*it))
+                    for (int i = 0; i < 3; i++ ) {
+                        if (!isDigit(date[i]))
                             isDate = false;
                     }
                     if (!isDate) {
