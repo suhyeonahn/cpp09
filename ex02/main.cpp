@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <ctime>
 #include <algorithm>
 #include <iterator>  
 #include <deque>
@@ -25,7 +26,6 @@ int ft_stoi(const std::string &str) {
   iss >> num;
   return (num);
 }
-
 std::vector<std::string> split(const std::string &s, char delim) {
     std::vector<std::string> result;
     std::stringstream ss(s);
@@ -39,19 +39,21 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return result;
 }
 
-void insertionSortVector(std::vector<int> & A, int l, int r) {
+template<typename Container>
+void insertionSort(Container & c, int l, int r) {
     for (int i = l; i < r; i++) {
-        int temp = A.at(i+1);
+        int temp = c.at(i+1);
         int j = i + 1;
-        while (j > l && A.at(j-1) > temp) {
-            A.at(j) = A.at(j-1);
+        while (j > l && c.at(j-1) > temp) {
+            c.at(j) = c.at(j-1);
             j--;
         }
-        A.at(j) = temp;
+        c.at(j) = temp;
     }
 }
 
-void mergeVector(std::vector<int> & A, int l, int m, int r) {
+template<typename Container>
+void merge(Container & c, int l, int m, int r) {
     int n1 = m - l + 1;
     int n2 = r - m;
 
@@ -59,11 +61,11 @@ void mergeVector(std::vector<int> & A, int l, int m, int r) {
     int rArray[r-m];
     int k = 0;
     for (int i = l; i < m+1; i++) {
-        lArray[k++] = A.at(i);
+        lArray[k++] = c.at(i);
     }
     k = 0;
     for (int i = m+1; i <= r; i++) {
-        rArray[k++] = A.at(i);
+        rArray[k++] = c.at(i);
     }
 
     int rIndex = 0;
@@ -71,118 +73,77 @@ void mergeVector(std::vector<int> & A, int l, int m, int r) {
 
     for (int i = l; i < r - l + 1; i++) {
         if (rIndex == n2) {
-            A.at(i) = lArray[lIndex];
+            c.at(i) = lArray[lIndex];
             lIndex++;
         } else if (lIndex == n1) {
-            A.at(i) = rArray[rIndex];
+            c.at(i) = rArray[rIndex];
             rIndex++;
         } else if (rArray[rIndex] > lArray[lIndex]) {
-            A.at(i) = lArray[lIndex];
+            c.at(i) = lArray[lIndex];
             lIndex++;
         } else {
-            A.at(i) = rArray[rIndex];
+            c.at(i) = rArray[rIndex];
             rIndex++;
         }
     }
 }
 
-void mergeSortVector(std::vector<int> & A, int l, int r) {
+template<typename Container>
+void mergeSort(Container & A, int l, int r) {
     if (r - l > K) {
         int m = (l + r) / 2;
-        mergeSortVector(A, l, m);
-        mergeSortVector(A, m + 1, r);
-        mergeVector(A, l, m, r);
+        mergeSort(A, l, m);
+        mergeSort(A, m + 1, r);
+        merge(A, l, m, r);
     } else {
-        insertionSortVector(A, l, r);
+        insertionSort(A, l, r);
     }
 }
 
-void insertionSortDeque(std::deque<int> & A, int l, int r) {
-    for (int i = l; i < r; i++) {
-        int temp = A.at(i+1);
-        int j = i + 1;
-        while (j > l && A.at(j-1) > temp) {
-            A.at(j) = A.at(j-1);
-            j--;
-        }
-        A.at(j) = temp;
+template<typename Container>
+void print_container(const Container & c, const std::string &str) {
+    std::cout << str;
+    for (size_t i = 0; i < c.size(); i++) {
+        std::cout << c.at(i) << " ";
     }
+    std::cout << std::endl;
 }
-
-void mergeDeque(std::deque<int> & A, int l, int m, int r) {
-    int n1 = m - l + 1;
-    int n2 = r - m;
-
-    int lArray[m-l+1];
-    int rArray[r-m];
-    int k = 0;
-    for (int i = l; i < m+1; i++) {
-        lArray[k++] = A.at(i);
-    }
-    k = 0;
-    for (int i = m+1; i <= r; i++) {
-        rArray[k++] = A.at(i);
-    }
-
-    int rIndex = 0;
-    int lIndex = 0;
-
-    for (int i = l; i < r - l + 1; i++) {
-        if (rIndex == n2) {
-            A.at(i) = lArray[lIndex];
-            lIndex++;
-        } else if (lIndex == n1) {
-            A.at(i) = rArray[rIndex];
-            rIndex++;
-        } else if (rArray[rIndex] > lArray[lIndex]) {
-            A.at(i) = lArray[lIndex];
-            lIndex++;
-        } else {
-            A.at(i) = rArray[rIndex];
-            rIndex++;
-        }
-    }
-}
-
-void mergeSortDeque(std::deque<int> & A, int l, int r) {
-    if (r - l > K) {
-        int m = (l + r) / 2;
-        mergeSortDeque(A, l, m);
-        mergeSortDeque(A, m + 1, r);
-        mergeDeque(A, l, m, r);
-    } else {
-        insertionSortDeque(A, l, r);
-    }
-}
-
 
 int main(int argc, char**argv) {
     if (argc != 2) {
         std::cout << "Error: bad argument(s)" << std::endl;
         return 1;
     }
-    std::vector<std::string> strVector = split(argv[1], ' ');
+    std::vector<std::string> str = split(argv[1], ' ');
     std::vector<int> vector;
     std::deque<int> deque;
-    for (size_t i = 0; i < strVector.size(); i ++) {
-        std::string str = strVector.at(i);
-        if (!isDigit(str)) {
+    for (size_t i = 0; i < str.size(); i++) {
+        if (!isDigit(str.at(i))) {
             std::cout << "Error: non digit value found" << std::endl;
             return 1;
         } else {
-            vector.push_back(ft_stoi(str));
-            deque.push_back(ft_stoi(str));
+            vector.push_back(ft_stoi(str.at(i)));
+            deque.push_back(ft_stoi(str.at(i)));
         }
-    }
+    }    
+    
+    print_container(vector, "before(vector): ");
+    clock_t start = clock();
+    mergeSort(vector, 0, vector.size() -1);
+    clock_t end = clock();
+    double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+    print_container(vector, "after(vector): ");
+    std::cout << "Time to process a range of " << vector.size() << " elements with [std::vector]: "
+        << elapsed * 1e9 << " us" << std::endl;
 
-    mergeSortVector(vector, 0, vector.size() -1);
-    for (size_t i = 0; i < vector.size(); i++) {
-        std::cout << vector.at(i) << std::endl;
-    }
+    print_container(deque, "before(deque): ");
+    start = clock();
+    mergeSort(deque, 0, deque.size() -1);
+    end = clock();
+    elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+    print_container(deque, "after(deque): ");
+    std::cout << "Time to process a range of " << deque.size() << " elements with [std::deque]: "
+        << elapsed * 1e9 << " us" << std::endl;
 
-    mergeSortDeque(deque, 0, deque.size() -1);
-    for (size_t i = 0; i < deque.size(); i++) {
-        std::cout << vector.at(i) << std::endl;
-    }
     return 0;
 }
