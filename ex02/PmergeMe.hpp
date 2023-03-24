@@ -13,8 +13,7 @@ class PmergeMe {
 	    PmergeMe( std::string input );
 	    PmergeMe( PmergeMe const & src );
         ~PmergeMe();
-        
-        //PmergeMe &   operator=( PmergeMe const & rhs );
+        PmergeMe & operator=( PmergeMe const & rhs );
 
         class BadDigitException : public std::exception {
 			public:
@@ -37,3 +36,7 @@ class PmergeMe {
         void merge( int l, int m, int r );
         void insertionSort( int l, int r );
 };
+
+bool isNumber(const std::string &s);
+int ft_stoi(const std::string &str);
+std::vector<std::string> split(const std::string &s, char delim);

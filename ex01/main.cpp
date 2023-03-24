@@ -5,6 +5,7 @@ int main(int argc, char**argv) {
         std::cout << "Error: bad argument(s)" << std::endl;
         return 1;
     }
+    
     RPN rpn(argv[1]);
     try {
         float result = rpn.calcul();

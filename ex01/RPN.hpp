@@ -9,7 +9,8 @@ class RPN {
 	    RPN( std::string input );
 	    RPN( RPN const & src );
         ~RPN();
-        //RPN &   operator=( RPN const & rhs );
+        RPN &   operator=( RPN const & rhs );
+		
         class LowStackException : public std::exception {
 			public:
 				virtual const char *	what()	const throw();

@@ -40,6 +40,15 @@ template<typename Container>
 PmergeMe<Container>::PmergeMe( const PmergeMe & src ) {*this = src;}
 template<typename Container>
 PmergeMe<Container>::~PmergeMe() {}
+template<typename Container>
+PmergeMe<Container> & PmergeMe<Container>::operator=(PmergeMe const & rhs)
+{
+    if (this == &rhs)
+        return *this;
+    this->_input = rhs._input;
+    this->_c = rhs._c;
+    return *this;
+}
 
 template<typename Container>
 void PmergeMe<Container>::insertionSort(int l, int r) {

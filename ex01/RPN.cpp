@@ -4,6 +4,13 @@ RPN::RPN() : _input(""){}
 RPN::RPN(std::string input) : _input(input){}
 RPN::RPN( const RPN & src) {*this = src;}
 RPN::~RPN() {}
+RPN & RPN::operator=(RPN const & rhs)
+{
+    if (this == &rhs)
+        return *this;
+    this->_input = rhs._input;
+    return *this;
+}
 
 float RPN::calcul() {
     std::stack<float> stack;

@@ -18,16 +18,16 @@ int main(int argc, char**argv) {
         vector.mergeSort(0, vector.getContainer().size() -1);
         clock_t end = clock();
         double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
-        vector.print("after(vector): ");
+        vector.print("\nafter(vector): ");
         std::cout << "Time to process a range of " << vector.getContainer().size() << " elements with [std::vector]: "
             << elapsed * 1e9 << " us" << std::endl;
 
-        deque.print("before(deque): ");
+        deque.print("\nbefore(deque): ");
         start = clock();
         deque.mergeSort(0, deque.getContainer().size() -1);
         end = clock();
         elapsed = (double)(end - start) / CLOCKS_PER_SEC;
-        deque.print("after(deque): ");
+        deque.print("\nafter(deque): ");
         std::cout << "Time to process a range of " << deque.getContainer().size() << " elements with [std::deque]: "
             << elapsed * 1e9 << " us" << std::endl;
     } catch (std::exception& e) {

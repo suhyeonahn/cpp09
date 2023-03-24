@@ -1,6 +1,7 @@
 NAME = btc
 
-SRC = main.cpp
+SRC = main.cpp \
+	BitcoinExchange.cpp
 	
 OBJS = $(SRC:.cpp=.o)
 DEPS = $(OBJS:.o=.d)
