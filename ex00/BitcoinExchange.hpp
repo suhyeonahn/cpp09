@@ -6,6 +6,7 @@
 #include <map>
 
 class BitcoinExchange {
+
     public:
         BitcoinExchange();
 	    BitcoinExchange( BitcoinExchange const & src );
@@ -21,6 +22,7 @@ class BitcoinExchange {
 
     private:
         std::map<std::string, float> _data;
+        
 };
 
 bool isLeap(int y);

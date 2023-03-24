@@ -4,6 +4,7 @@
 #include <stack>
 
 class RPN {
+
     public:
         RPN();
 	    RPN( std::string input );
@@ -25,6 +26,8 @@ class RPN {
 		};
 
         float calcul();
+
     private:
         std::string _input;
+		
 };

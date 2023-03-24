@@ -9,14 +9,6 @@ bool isNumber(const std::string &s)
     return !s.empty() && it == s.end();
 }
 
-int ft_stoi(const std::string &str) {
-  std::istringstream iss(str);
-  int num;
-
-  iss >> num;
-  return (num);
-}
-
 std::vector<std::string> split(const std::string &s, char delim) {
     std::vector<std::string> result;
     std::stringstream ss(s);
@@ -128,9 +120,8 @@ void PmergeMe<Container>::parse() {
     for (size_t i = 0; i < str.size(); i++) {
         if (!isNumber(str.at(i))) {
             throw BadDigitException();
-        } else {
-            _c.push_back(ft_stoi(str.at(i)));
         }
+        _c.push_back(std::atoi(str.at(i).c_str()));
     } 
 }
 
