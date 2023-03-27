@@ -36,6 +36,19 @@ bool isDateFormat(std::string str) {
     return true;
 }
 
+bool isSpace(const std::string &str)
+{
+    size_t first = str.find_first_of(' ');
+    if (first == std::string::npos)
+        return false;
+    for (std::size_t i = first + 1; i < str.length(); ++i) {
+        if (str[i] != ' ')
+            return false;
+    }
+    return true;
+}
+
+
 BitcoinExchange::BitcoinExchange() {}
 BitcoinExchange::BitcoinExchange(const BitcoinExchange & src) {*this = src;}
 BitcoinExchange::~BitcoinExchange() {}
@@ -84,22 +97,25 @@ void BitcoinExchange::print(const char* input) {
 
             getline(ss, date, '|');
             getline(ss, value);
-
-            float val = std::atof(value.c_str());
-
-            if (date.empty() || value.empty())
+            double val = std::atof(value.c_str());
+            if (line == "date | value")
+                ;
+            else if (date.empty() || value.empty() || !isSpace(date))
                 std::cout << "Error: bad syntax => " << line << std::endl;
-			else if (val > MAX_VAL || val < MIN_VAL)
+			else if (val > MAX_VAL || val < MIN_VAL || (val == 0 && value.find("0") == std::string::npos))
                 std::cout << "Error: invalid value => " << line << std::endl;
             else if (!isDateFormat(date))
                 std::cout << "Error: invalid date => " << line << std::endl;
             else {
                 std::cout << date << " => " << value << " = ";
-                if ((--_data.end())->first < date) {
+                if (_data.begin()->first > date) {
+                    std::cout << val * (_data.begin())->second << std::endl;
+                }
+                else if ((--_data.end())->first < date) {
                     std::cout << val * (--_data.end())->second << std::endl;
                 }
                 else {
-                    std::map<std::string,float>::iterator it = _data.find(date);
+                    std::map<std::string,double>::iterator it = _data.find(date);
                     if (_data.find(date) != _data.end())
                         std::cout << val * (*it).second << std::endl;
                     else
