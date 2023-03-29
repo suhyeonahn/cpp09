@@ -1,5 +1,7 @@
 #include "PmergeMe.hpp"
 
+const int N = 5;
+
 bool isNumber(const std::string &s)
 {
     std::string::const_iterator it = s.begin();
@@ -7,19 +9,6 @@ bool isNumber(const std::string &s)
         it++;
     while (it != s.end() && std::isdigit(*it)) ++it;
     return !s.empty() && it == s.end();
-}
-
-std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> result;
-    std::stringstream ss(s);
-    std::string item;
-
-    while (getline(ss, item, delim)) {
-        if (item != "")
-            result.push_back(item);
-    }
-
-    return result;
 }
 
 template<typename Container>
@@ -111,7 +100,7 @@ void PmergeMe<Container>::mergeSort(int l, int r) {
     if (l >= r) {
         return;
     }
-    if (r-l < 5) {
+    if (r-l < N) {
         insertionSort(l, r);
         return;
     }

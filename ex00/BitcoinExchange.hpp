@@ -12,6 +12,7 @@ class BitcoinExchange {
 	    BitcoinExchange( BitcoinExchange const & src );
         ~BitcoinExchange();
         BitcoinExchange &   operator=( BitcoinExchange const & rhs );
+
         class NoFileException : public std::exception {
 			public:
 				virtual const char *	what()	const throw();
@@ -28,3 +29,5 @@ class BitcoinExchange {
 bool isLeap(int y);
 bool isValidDate(int d, int m, int y);
 bool isDateFormat(std::string str);
+bool isSpace(const std::string &str);
+bool isSpaceValue(const std::string &str);

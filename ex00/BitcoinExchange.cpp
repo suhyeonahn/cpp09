@@ -41,10 +41,15 @@ bool isSpace(const std::string &str)
     size_t first = str.find_first_of(' ');
     if (first == std::string::npos)
         return false;
-    for (std::size_t i = first + 1; i < str.length(); ++i) {
-        if (str[i] != ' ')
-            return false;
-    }
+    if (first + 1 < str.length())
+        return false;
+    return true;
+}
+
+bool isSpaceValue(const std::string &str)
+{
+    if (str[0] != ' ' || str[1] == ' ')
+        return false;
     return true;
 }
 
@@ -100,14 +105,14 @@ void BitcoinExchange::print(const char* input) {
             double val = std::atof(value.c_str());
             if (line == "date | value")
                 ;
-            else if (date.empty() || value.empty() || !isSpace(date))
+            else if (date.empty() || value.empty() || !isSpace(date) || !isSpaceValue(value))
                 std::cout << "Error: bad syntax => " << line << std::endl;
 			else if (val > MAX_VAL || val < MIN_VAL || (val == 0 && value.find("0") == std::string::npos))
                 std::cout << "Error: invalid value => " << line << std::endl;
             else if (!isDateFormat(date))
                 std::cout << "Error: invalid date => " << line << std::endl;
             else {
-                std::cout << date << " => " << value << " = ";
+                std::cout << date << "=>" << value << " = ";
                 if (_data.begin()->first > date) {
                     std::cout << val * (_data.begin())->second << std::endl;
                 }

@@ -9,11 +9,6 @@
 #include <exception>
 #include <cstdlib>
 
-bool isNumber(const std::string &s);
-std::vector<std::string> split(const std::string &s, char delim);
-
-const int N = 5;
-
 template<typename Container>
 class PmergeMe
 {
@@ -22,12 +17,13 @@ class PmergeMe
         PmergeMe();
         PmergeMe(char** input);
         PmergeMe(const PmergeMe &src);
-        virtual ~PmergeMe();
+        ~PmergeMe();
         PmergeMe &operator=(PmergeMe const &rhs);
+
         void parse();
-        void mergeSort(int l, int r);
         void sort();
         void print(const std::string &str);
+
         Container getContainer() const;
         class BadDigitException : public std::exception {
 			public:
@@ -43,8 +39,11 @@ class PmergeMe
         Container _c;
         void insertionSort(int l, int r);
         void merge(int l, int m, int r);
+        void mergeSort(int l, int r);
 
 };
+
+bool isNumber(const std::string &s);
 
 #include "PmergeMe.cpp"
 #endif
